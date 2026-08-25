@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>hasned.dev API</title>
+<style>
+body{font-family:ui-monospace,Menlo,Consolas,monospace;background:#0d1117;color:#e6edf3;max-width:900px;margin:0 auto;padding:2rem 1rem;line-height:1.6}
+h1,h2{color:#58a6ff}code{background:#161b22;padding:.1rem .35rem;border-radius:4px}
+table{border-collapse:collapse;width:100%;font-size:.85rem}
+td,th{border:1px solid #30363d;padding:.4rem .6rem;text-align:left}
+a{color:#58a6ff}
+</style>
+</head>
+<body>
+<h1>hasned.dev API</h1>
+<p>Free, no-login JSON utilities. Base URL: <code>https://hasned.is-a.dev/x402/paid</code></p>
+<p>All endpoints accept GET (query params) and POST (JSON body). Responses are JSON: <code>{"ok": true, ...}</code> or <code>{"ok": false, "error": "..."}</code>.</p>
+
+<h2>Tools</h2>
+<table>
+<tr><th>Tool</th><th>Params</th><th>Example</th></tr>
+<tr><td>hash</td><td>text, optional algo (sha256 default)</td><td>/hash?text=hello</td></tr>
+<tr><td>uuid</td><td>none</td><td>/uuid</td></tr>
+<tr><td>base64</td><td>text, optional decode=true</td><td>/base64?text=aGk=</td></tr>
+<tr><td>qrcode</td><td>text</td><td>returns QR as SVG</td></tr>
+<tr><td>csv2json</td><td>csv</td><td>/csv2json?csv=name%2Cage</td></tr>
+<tr><td>json2csv</td><td>json</td><td>array of flat objects</td></tr>
+<tr><td>yaml2json</td><td>yaml</td><td>YAML string</td></tr>
+<tr><td>jwt-decode</td><td>token</td><td>header+payload, no verification</td></tr>
+<tr><td>dns-lookup</td><td>domain, optional type</td><td>A/AAAA/MX/TXT</td></tr>
+<tr><td>whois</td><td>domain</td><td>raw record</td></tr>
+<tr><td>geoip</td><td>ip or host</td><td>country/city/ASN</td></tr>
+<tr><td>crypto-price</td><td>ids, optional vs</td><td>CoinGecko ids</td></tr>
+<tr><td>fx-rates</td><td>base, optional symbols</td><td>ECB reference rates</td></tr>
+<tr><td>wayback</td><td>url</td><td>latest archive snapshot</td></tr>
+<tr><td>html2md</td><td>url</td><td>page converted to Markdown</td></tr>
+<tr><td>weather</td><td>q (city)</td><td>current conditions</td></tr>
+</table>
+
+<h2>Limits</h2>
+<p>Rate-limited per IP to keep the service free for everyone. No accounts, no API keys, no tracking.</p>
+<p><a href="/">back to homepage</a></p>
+</body>
+</html>
