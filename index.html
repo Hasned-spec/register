@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>hasned.dev - Developer Toolbox</title>
+<style>
+:root{color-scheme:dark}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:#0d1117;color:#e6edf3;line-height:1.6;padding:2rem 1rem}
+main{max-width:900px;margin:0 auto}
+h1{font-size:1.6rem;border-bottom:1px solid #30363d;padding-bottom:.5rem;margin-bottom:.25rem}
+.sub{color:#8b949e;margin-bottom:2rem;font-size:.9rem}
+h2{font-size:1.15rem;margin:2rem 0 1rem;color:#58a6ff}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem}
+.card{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:1rem}
+.card h3{font-size:.95rem;margin-bottom:.5rem}
+textarea,input[type=text]{width:100%;background:#0d1117;color:#e6edf3;border:1px solid #30363d;border-radius:6px;padding:.5rem;font:inherit;font-size:.85rem;min-height:70px;resize:vertical}
+button{background:#238636;color:#fff;border:0;border-radius:6px;padding:.45rem .9rem;font:inherit;font-size:.85rem;cursor:pointer;margin-top:.5rem}
+button:hover{background:#2ea043}
+pre{background:#0d1117;border:1px solid #30363d;border-radius:6px;padding:.5rem;font-size:.8rem;white-space:pre-wrap;word-break:break-all;min-height:1.5rem;margin-top:.5rem}
+table{border-collapse:collapse;width:100%;font-size:.85rem}
+td,th{border:1px solid #30363d;padding:.4rem .6rem;text-align:left}
+th{background:#161b22}
+a{color:#58a6ff;text-decoration:none}a:hover{text-decoration:underline}
+footer{margin-top:3rem;color:#8b949e;font-size:.8rem;border-top:1px solid #30363d;padding-top:1rem}
+</style>
+</head>
+<body>
+<main>
+<h1>hasned.dev</h1>
+<p class="sub">Free, no-login developer utilities. Everything runs in your browser; nothing is stored.</p>
+
+<h2>Tools</h2>
+<div class="grid">
+<div class="card"><h3>SHA-256 hash</h3><textarea id="sha-in" placeholder="text to hash"></textarea><button onclick="doSha()">Hash</button><pre id="sha-out"></pre></div>
+<div class="card"><h3>UUID v4</h3><button onclick="document.getElementById('uuid-out').textContent=crypto.randomUUID()">Generate</button><pre id="uuid-out"></pre></div>
+<div class="card"><h3>Base64</h3><textarea id="b64-in" placeholder="text"></textarea><button onclick="doB64(1)">Encode</button><button onclick="doB64(0)">Decode</button><pre id="b64-out"></pre></div>
+<div class="card"><h3>CSV to JSON</h3><textarea id="csv-in" placeholder="name,age&#10;alice,30"></textarea><button onclick="doCsv()">Convert</button><pre id="csv-out"></pre></div>
+<div class="card"><h3>JSON formatter</h3><textarea id="json-in" placeholder='{"a":1}'></textarea><button onclick="doJson()">Pretty print</button><pre id="json-out"></pre></div>
+<div class="card"><h3>URL encode</h3><input type="text" id="url-in" placeholder="https://example.com/?q=a b"><button onclick="document.getElementById('url-out').textContent=encodeURIComponent(document.getElementById('url-in').value)">Encode</button><pre id="url-out"></pre></div>
+</div>
+
+<h2>Hosted API</h2>
+<p>The same utilities are available as plain-HTTP JSON endpoints for scripts and CI jobs
+(<code>GET/POST https://hasned.is-a.dev/x402/paid/&lt;tool&gt;</code>). Tools include:
+hash, uuid, base64, qrcode, csv2json, json2csv, yaml2json, jwt-decode, url tools,
+dns-lookup, whois, geoip, crypto-price, fx-rates, wayback, html2md.
+All endpoints have a free tier (rate-limited); heavier use can optionally settle with
+x402 micropayments. See <a href="/llms.txt">endpoint docs (llms.txt)</a>.</p>
+
+<h2>About</h2>
+<table>
+<tr><th>Purpose</th><td>Personal developer toolbox and API playground</td></tr>
+<tr><th>Contact</th><td><a href="https://github.com/Hasned-spec">github.com/Hasned-spec</a></td></tr>
+<tr><th>Source</th><td><a href="https://github.com/Hasned-spec">github.com/Hasned-spec</a> (this page is a static single file)</td></tr>
+</table>
+
+<footer>hasned.dev - static page, no cookies, no analytics, no trackers.</footer>
+</main>
+<script>
+async function doSha(){const b=new TextEncoder().encode(document.getElementById('sha-in').value);
+const h=await crypto.subtle.digest('SHA-256',b);
+document.getElementById('sha-out').textContent=[...new Uint8Array(h)].map(x=>x.toString(16).padStart(2,'0')).join('')}
+function doB64(e){const v=document.getElementById('b64-in').value,o=document.getElementById('b64-out');
+try{o.textContent=e?btoa(unescape(encodeURIComponent(v))):decodeURIComponent(escape(atob(v.trim())))}catch(err){o.textContent='error: '+err.message}}
+function doCsv(){const lines=document.getElementById('csv-in').value.trim().split(/\r?\n/);
+if(!lines[0]){return}
+const head=lines[0].split(','),out=[];
+for(const l of lines.slice(1)){if(!l)continue;const cells=l.split(',');const o={};head.forEach((h,i)=>o[h]=cells[i]??'');out.push(o)}
+document.getElementById('csv-out').textContent=JSON.stringify(out,null,2)}
+function doJson(){try{document.getElementById('json-out').textContent=JSON.stringify(JSON.parse(document.getElementById('json-in').value),null,2)}
+catch(e){document.getElementById('json-out').textContent='error: '+e.message}}
+</script>
+</body>
+</html>
